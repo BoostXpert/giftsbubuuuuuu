@@ -109,7 +109,7 @@
         }
 
         .long-text b {
-            color: #4a3629; /* Slightly darker brown for bold text */
+            color: #4a3629; 
         }
 
         /* Right Column: Screenshot & Aesthetics */
@@ -142,10 +142,11 @@
         .polaroid-img {
             width: 100%;
             height: 100%;
-            background-color: #dadada; 
-            background-size: cover;
+            background-color: #fff; /* Match border so empty space looks natural */
+            /* UPDATED: 'contain' ensures the whole screenshot fits without cropping */
+            background-size: contain; 
+            background-repeat: no-repeat;
             background-position: center;
-            border: 1px solid #eee;
         }
 
         .pushpin {
@@ -217,6 +218,22 @@
             .greeting { font-size: 32px; }
             #letter-container { height: 90vh; }
         }
+
+        /* --- HEART ANIMATION CSS --- */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 24px;
+            color: #ff4d4d;
+            animation: fall linear forwards;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) scale(0.8) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -248,14 +265,14 @@
         <div class="controls">
             <button class="btn" id="btn-prev" onclick="changePage(-1)">← Previous</button>
             <div class="page-indicator" id="page-indicator">Page 1 of 3</div>
-            <button class="btn" id="btn-next" onclick="changePage(1)">Next →</button>
+            <button class="btn" id="btn-next" onclick="handleNext()">Next →</button>
         </div>
 
     </div>
 
     <script>
         // ==========================================
-        // 1. CONTENT ARRAY (Exactly 3 Pages)
+        // 1. CONTENT ARRAY 
         // ==========================================
         const pages = [
             {
@@ -299,6 +316,17 @@
             }, 500); 
         }
 
+        // Handles next button click
+        function handleNext() {
+            if (currentPage === pages.length - 1) {
+                // If on the last page, trigger the heart animation
+                triggerHearts();
+            } else {
+                // Otherwise, go to next page
+                changePage(1);
+            }
+        }
+
         function changePage(direction) {
             const contentArea = document.getElementById('content-area');
             
@@ -325,7 +353,53 @@
             document.getElementById('page-indicator').innerText = `Page ${currentPage + 1} of ${pages.length}`;
             
             document.getElementById('btn-prev').disabled = (currentPage === 0);
-            document.getElementById('btn-next').disabled = (currentPage === pages.length - 1);
+            
+            // Check if it's the last page to change the Next button
+            const nextBtn = document.getElementById('btn-next');
+            if (currentPage === pages.length - 1) {
+                nextBtn.innerText = "Click for magic ✨";
+                nextBtn.disabled = false; // Keep it enabled for the magic button
+            } else {
+                nextBtn.innerText = "Next →";
+                nextBtn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // 3. HEART ANIMATION 
+        // ==========================================
+        function triggerHearts() {
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100vw';
+            container.style.height = '100vh';
+            container.style.pointerEvents = 'none'; // So clicks pass through
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+
+            // Create 60 hearts
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.className = 'heart';
+                    // Random horizontal position
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    // Random size
+                    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    // Random fall duration between 2 and 4 seconds
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    container.appendChild(heart);
+                }, i * 50); // Stagger the start times
+            }
+
+            // Clean up the container after all animations finish (approx 6 seconds)
+            setTimeout(() => {
+                container.remove();
+            }, 6000);
         }
     </script>
 </body>
