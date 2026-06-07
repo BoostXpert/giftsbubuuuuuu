@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Story For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Page Styling - Warm, Cinematic Aesthetic */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1c1815;
+            font-family: 'Lora', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            color: #2b2623;
+        }
+
+        /* --- ENVELOPE (Start Screen) --- */
+        #envelope-container {
+            cursor: pointer;
+            text-align: center;
+            color: #e8dcc4;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .envelope-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+            animation: bounce 2.5s infinite ease-in-out;
+        }
+
+        .click-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- THE LETTER --- */
+        #letter-container {
+            display: none; 
+            opacity: 0;
+            transform: scale(0.8); 
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            background-color: #f2e9d8; 
+            background-image: radial-gradient(circle, #fcf6eb 20%, #e3d3b6 100%);
+            box-shadow: 5px 5px 30px rgba(0,0,0,0.8);
+            position: relative;
+            border-radius: 8px;
+            transition: opacity 1s ease, transform 1s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #letter-container.open {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- CONTENT AREA (2 Columns) --- */
+        #content-area {
+            display: flex;
+            flex: 1;
+            padding: 40px;
+            gap: 40px;
+            overflow: hidden;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Left Column: Long Text */
+        .text-column {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .text-column::-webkit-scrollbar {
+            width: 6px;
+        }
+        .text-column::-webkit-scrollbar-thumb {
+            background: #c2b297; 
+            border-radius: 4px;
+        }
+
+        .greeting {
+            font-family: 'Dancing Script', cursive;
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: #5c4334;
+        }
+
+        .long-text {
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .long-text b {
+            color: #4a3629; /* Slightly darker brown for bold text */
+        }
+
+        /* Right Column: Screenshot & Aesthetics */
+        .media-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .polaroid {
+            width: 280px;
+            height: 380px;
+            background-color: #fff;
+            box-shadow: 4px 6px 15px rgba(0,0,0,0.25);
+            padding: 15px;
+            padding-bottom: 60px;
+            box-sizing: border-box;
+            transform: rotate(2deg);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 100%;
+            background-color: #dadada; 
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #eee;
+        }
+
+        .pushpin {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .photo-caption {
+            font-family: 'Dancing Script', cursive;
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* --- NAVIGATION CONTROLS --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(227, 211, 182, 0.4);
+            border-top: 1px solid #d1c1a5;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .page-indicator {
+            font-family: 'Dancing Script', cursive;
+            font-size: 24px;
+            color: #5c4334;
+        }
+
+        .btn {
+            background-color: #5c4334;
+            color: #f2e9d8;
+            border: none;
+            padding: 10px 24px;
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            background-color: #3a2a21;
+        }
+
+        .btn:disabled {
+            background-color: #b5a99f;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 800px) {
+            #content-area { flex-direction: column; gap: 20px; padding: 20px; overflow-y: auto; }
+            .text-column { overflow-y: visible; padding-right: 0; }
+            .polaroid { width: 220px; height: 300px; padding-bottom: 50px; }
+            .greeting { font-size: 32px; }
+            #letter-container { height: 90vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="envelope-container" onclick="openLetter()">
+        <div class="envelope-icon">💌</div>
+        <div class="click-text">A story for you...</div>
+    </div>
+
+    <div id="letter-container" style="display: none;">
+        
+        <div id="content-area">
+            
+            <div class="text-column">
+                <div class="greeting" id="display-greeting">Dearest,</div>
+                <div class="long-text" id="display-text"></div>
+            </div>
+
+            <div class="media-column">
+                <div class="polaroid">
+                    <div class="pushpin">📌</div>
+                    <div class="polaroid-img" id="display-image"></div>
+                    <div class="photo-caption" id="display-caption"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="btn-prev" onclick="changePage(-1)">← Previous</button>
+            <div class="page-indicator" id="page-indicator">Page 1 of 3</div>
+            <button class="btn" id="btn-next" onclick="changePage(1)">Next →</button>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. CONTENT ARRAY (Exactly 3 Pages)
+        // ==========================================
+        const pages = [
+            {
+                greeting: "My jaan...",
+                text: "I’ll always be with you especially through your struggling phase, every single moment and honestly I love every second I spend with you. No matter how much time we get together, my heart never feels full... this heart always wants more ❤️<br><br>Sometimes I don't even have the right words to express what I feel I just want to sit there and keep looking at you without saying anything at all... just admiring you and when I rest my head on your belly while you're sleeping, I feel a different kind of peace. It’s like all the noise in the world fades away, and I just want to stay there quietly...<br><br>and then there are all those little things... the pucchis, kisses, hugs. The attraction between us is so strong that I feel it deeply. Sometimes, even when I try to control myself, I simply can't 😂 but more than anything, your hugs are my weakness 😂 I could stay wrapped in them forever.<br><br><b>The way you ignore others for me... making me feel even more secure. ❤️</b><br><br>and about that... I don't really feel like paying attention to anyone else my eyes and heart naturally find their way back to you no one seems better than you anymore, so here I am... completely lost in you 🫠<br><br><b>The best person in this whole world. ❤️</b><br><br>Thank you, my jaan, for saying such beautiful things to me. Today 2 months since we first met, and just like this, one day we'll reach that beautiful moment <b>\"shaadi\"</b> & <b>\"feeree\"</b> together....<br><br>\"Good things come to those who wait,\" and I truly believe our story is one of them.<br><br>Happy 2 month anniversary, my baccha... ❤️<br><br>I love youuuu soooo much!! 💞✨",
+                image: "url('s1.png')", 
+                caption: "2 beautiful months"
+            },
+            {
+                greeting: "Thank you, my jaan... ❤️",
+                text: "Thank you for taking such good care of me. I think I'll remember all of this for the rest of my life. Your love, your prayers for me, the way you worry about me, those 10–15 missed calls throughout the day, staying awake at night just to remind me to take my medicine, checking my temperature again and again... all of it means more to me than I can ever explain.<br><br>And even when you're going through your own discomfort during your periods, you still put my health before everything else. That kind of love is rare.<br><br>Honestly, I don't have enough words to tell you how much I love you. And when I think about all the efforts you make for me, my mind just goes blank... because \"thank you\" feels too small for everything you've done.<br><br>Thank you for everything, my baccha... for your care, your patience, your love.<br><br>I love you more than words can ever express. 💞",
+                image: "url('s2.png')",
+                caption: "Your beautiful care"
+            },
+            {
+                greeting: "My jaan... ❤️",
+                text: "Thank you for this treat from your very first salary, my jaan... ❤️<br><br>This treat means so much more to me because you gave it to me from the money you earned through your own hard work. Honestly, it's the best treat I've ever received, and I'll never forget a single moment we spent together that day.<br><br>Eating burgers, pastry, pizza, rolls, and chaap together... then clicking photos in the park and simply spending time with each other — those were some of the best moments I've ever had. ❤️<br><br>I just wish we settle down soon, achieve all our goals together, and keep exploring new places, creating beautiful memories, and enjoying life side by side. 💞<br><br>Thank you for making that day so special. ❤️",
+                image: "url('s3.png')",
+                caption: "Unforgettable moments"
+            }
+        ];
+
+        // ==========================================
+        // 2. THE ENGINE
+        // ==========================================
+        let currentPage = 0;
+
+        function openLetter() {
+            const envelope = document.getElementById('envelope-container');
+            envelope.style.opacity = '0';
+            
+            setTimeout(() => {
+                envelope.style.display = 'none'; 
+                const letter = document.getElementById('letter-container');
+                letter.style.display = 'flex'; 
+                
+                setTimeout(() => {
+                    letter.classList.add('open');
+                    updateDOM();
+                }, 50);
+            }, 500); 
+        }
+
+        function changePage(direction) {
+            const contentArea = document.getElementById('content-area');
+            
+            contentArea.style.opacity = '0';
+            
+            setTimeout(() => {
+                currentPage += direction;
+                updateDOM();
+                
+                contentArea.style.opacity = '1';
+                
+                document.querySelector('.text-column').scrollTop = 0;
+            }, 400);
+        }
+
+        function updateDOM() {
+            const data = pages[currentPage];
+            
+            document.getElementById('display-greeting').innerHTML = data.greeting;
+            document.getElementById('display-text').innerHTML = data.text;
+            document.getElementById('display-image').style.backgroundImage = data.image;
+            document.getElementById('display-caption').innerText = data.caption;
+            
+            document.getElementById('page-indicator').innerText = `Page ${currentPage + 1} of ${pages.length}`;
+            
+            document.getElementById('btn-prev').disabled = (currentPage === 0);
+            document.getElementById('btn-next').disabled = (currentPage === pages.length - 1);
+        }
+    </script>
+</body>
+</html>
