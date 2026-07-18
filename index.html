@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- ============================================= -->
-    <!-- FORCE BROWSER TO ALWAYS FETCH FRESH VERSION    -->
-    <!-- ============================================= -->
+
+    <!-- Force fresh load -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
+
     <title>For You ❤️</title>
-    <!-- Elegant cursive font -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts: elegant cursive + clean sans-serif for accents -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Reset */
+        /* ----- RESET ----- */
         * {
             margin: 0;
             padding: 0;
@@ -24,26 +23,51 @@
         }
 
         body {
-            background: linear-gradient(135deg, #3a001e 0%, #8a0a30 100%);
-            height: 100vh;
-            overflow: hidden; /* Prevents scrollbars */
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            font-family: 'Great Vibes', cursive;
-            padding: 1rem; /* Adds a tiny bit of breathing room on edges */
+            background: radial-gradient(ellipse at center, #1a0011 0%, #0d0008 100%);
+            font-family: 'Quicksand', sans-serif;
+            padding: 1.5rem;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Falling particles container */
+        /* ----- BACKGROUND SPARKLE OVERLAY ----- */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(2px 2px at 20% 30%, #fff3, transparent),
+                radial-gradient(2px 2px at 40% 70%, #fff2, transparent),
+                radial-gradient(2px 2px at 60% 20%, #fff3, transparent),
+                radial-gradient(2px 2px at 80% 80%, #fff2, transparent),
+                radial-gradient(2px 2px at 10% 90%, #fff2, transparent),
+                radial-gradient(2px 2px at 90% 10%, #fff3, transparent);
+            background-size: 200px 200px;
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* ----- FLOATING HEARTS CONTAINER ----- */
         #particle-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Lets you tap/click through */
-            z-index: 1;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
         }
 
         .particle {
@@ -51,87 +75,265 @@
             top: -10vh;
             opacity: 0;
             animation: fall linear forwards;
-            will-change: transform; /* GPU acceleration for smoother animation on Redmi */
+            will-change: transform;
+            filter: drop-shadow(0 0 6px rgba(255, 80, 120, 0.5));
         }
 
-        /* Centered message */
-        .message-container {
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.6);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* ----- THE MAIN CARD ----- */
+        .card {
             position: relative;
-            z-index: 2;
-            width: 92%;
-            max-width: 900px;
+            z-index: 1;
+            max-width: 750px;
+            width: 100%;
+            background: linear-gradient(145deg, rgba(60, 10, 35, 0.92), rgba(30, 5, 20, 0.96));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 2.8rem 2.8rem 3.2rem;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 120, 160, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 200, 220, 0.08);
             text-align: center;
-            padding: 0.5rem 0;
+            animation: cardAppear 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform-origin: center;
         }
 
-        p {
-            color: #ffe6eb;
-            /* Responsive font: scales from 2rem (small phones) to 3rem (big screens) */
-            font-size: clamp(2rem, 5.5vw, 3.2rem); 
-            line-height: 1.4; /* Tighter, cleaner look on mobile */
-            margin-bottom: clamp(1.2rem, 4vh, 2.5rem);
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); 
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.92) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* ----- DECORATIVE TOP ACCENT ----- */
+        .card-decoration {
+            font-size: 2.8rem;
+            letter-spacing: 12px;
+            margin-bottom: 0.2rem;
+            opacity: 0.7;
+            background: linear-gradient(90deg, #ff8aae, #ff4d7a, #ff8aae);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%,
+            100% {
+                background-position: 0% center;
+            }
+            50% {
+                background-position: 200% center;
+            }
+        }
+
+        /* ----- HEADLINE ----- */
+        .card-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.8rem, 8vw, 4.2rem);
+            color: #ffe2ec;
+            text-shadow: 0 4px 30px rgba(255, 80, 130, 0.4);
+            margin-bottom: 1.8rem;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+
+        .card-title span {
+            display: inline-block;
+            animation: heartbeat 1.8s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.2);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.15);
+            }
+            56% {
+                transform: scale(1);
+            }
+        }
+
+        /* ----- MESSAGE PARAGRAPHS (ALL VISIBLE AT ONCE) ----- */
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .message-content p {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+            color: #f5dce6;
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+            margin: 0;
             opacity: 0;
-            transform: translateY(20px);
-            animation: textFadeIn 2s ease-out forwards;
-            word-break: break-word; /* Prevents long words from breaking layout */
+            animation: fadeUp 0.8s ease forwards;
         }
 
-        p:last-child {
-            margin-bottom: 0;
+        /* Stagger only slightly so they appear almost together but with a tiny ripple */
+        .message-content p:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+        .message-content p:nth-child(2) {
+            animation-delay: 0.45s;
+        }
+        .message-content p:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        .message-content p:nth-child(4) {
+            animation-delay: 0.75s;
         }
 
-        /* Staggered fade-in */
-        p:nth-child(1) { animation-delay: 0.5s; }
-        p:nth-child(2) { animation-delay: 2.5s; }
-        p:nth-child(3) { animation-delay: 4.5s; }
-        p:nth-child(4) { animation-delay: 6.5s; }
-
-        @keyframes textFadeIn {
-            to {
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        @keyframes fall {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(0.8);
-                opacity: 1;
+        /* ----- DIVIDER ----- */
+        .divider {
+            width: 80px;
+            height: 2px;
+            margin: 1.8rem auto 1.6rem;
+            background: linear-gradient(90deg, transparent, #ff7da3, transparent);
+            border-radius: 4px;
+            opacity: 0.6;
+        }
+
+        /* ----- SIGNATURE / CLOSING ----- */
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            color: #ffb6cc;
+            text-shadow: 0 2px 20px rgba(255, 80, 130, 0.3);
+            margin-top: 0.2rem;
+            letter-spacing: 1px;
+        }
+
+        .signature small {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            display: block;
+            color: #b8889a;
+            margin-top: 0.2rem;
+            letter-spacing: 2px;
+        }
+
+        /* ----- RESPONSIVE TWEAKS ----- */
+        @media (max-width: 600px) {
+            .card {
+                padding: 2rem 1.5rem 2.4rem;
+                border-radius: 32px;
             }
-            100% {
-                transform: translateY(110vh) rotate(360deg) scale(1.2);
-                opacity: 0;
+
+            .card-decoration {
+                font-size: 2rem;
+                letter-spacing: 8px;
+            }
+
+            .message-content p {
+                font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+                line-height: 1.6;
+            }
+
+            .divider {
+                width: 60px;
+                margin: 1.4rem auto 1.2rem;
             }
         }
 
-        /* Optional: Fine-tune for very small screens (like 360px wide) */
         @media (max-width: 400px) {
-            p {
+            .card {
+                padding: 1.6rem 1.2rem 2rem;
+                border-radius: 24px;
+            }
+
+            .card-title {
+                font-size: clamp(2.2rem, 10vw, 2.8rem);
+            }
+
+            .signature {
                 font-size: clamp(1.6rem, 6vw, 2.2rem);
-                line-height: 1.3;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Falling particles -->
+    <!-- FLOATING HEARTS & SPARKLES -->
     <div id="particle-container"></div>
 
-    <!-- Love message -->
-    <div class="message-container">
-        <p>From the very moment you came into my life, everything just felt a little bit brighter and a lot more beautiful.</p>
-        <p>Your smile is absolutely my favorite sight in the world, and just hearing your voice makes my worst days fade away.</p>
-        <p>I wanted to make this little corner of the internet just to surprise you and remind you of how incredibly special you are to me.</p>
-        <p>I love you, more than words can say.</p>
+    <!-- ====== THE CARD ====== -->
+    <div class="card">
+
+        <!-- Decorative top -->
+        <div class="card-decoration">✦ ❀ ✦</div>
+
+        <!-- Title with beating heart -->
+        <h1 class="card-title">
+            For You <span>❤️</span>
+        </h1>
+
+        <!-- All paragraphs visible at once -->
+        <div class="message-content">
+            <p>From the very moment you came into my life, everything felt a little brighter and a lot more beautiful.</p>
+            <p>Your smile is my favorite sight in the world, and your voice makes even my worst days fade away.</p>
+            <p>I made this little corner of the internet just to remind you how incredibly special you are to me.</p>
+            <p>I love you — more than words could ever say.</p>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Signature -->
+        <div class="signature">
+            Always yours,
+            <small>— with all my heart ✨</small>
+        </div>
+
     </div>
 
     <script>
         // ============================================================
-        // 1. FALLING HEARTS & SPARKLES (GPU accelerated for Redmi)
+        // 1. FLOATING HEARTS — GPU accelerated, romantic vibe
         // ============================================================
-        const symbols = ['❤️', '💖', '✨', '💕', '💫'];
+        const symbols = ['❤️', '💖', '✨', '💕', '💫', '🌸', '🌹'];
         const container = document.getElementById('particle-container');
 
         function createParticle() {
@@ -139,39 +341,27 @@
             el.classList.add('particle');
             el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
             el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = Math.random() * 3 + 4 + 's'; // 4-7 seconds
-            el.style.fontSize = Math.random() * 1.8 + 1.2 + 'rem'; // Varying sizes, slightly larger on mobile
+            el.style.animationDuration = Math.random() * 4 + 5 + 's';
+            el.style.fontSize = Math.random() * 1.8 + 1.2 + 'rem';
+            el.style.opacity = Math.random() * 0.5 + 0.5;
             container.appendChild(el);
-            setTimeout(() => el.remove(), 7500);
+            setTimeout(() => el.remove(), 9000);
         }
 
-        // Slightly reduced interval (300ms instead of 250ms) to balance performance 
-        // while keeping the screen lively on Redmi 13 5G
-        setInterval(createParticle, 300);
-
+        // Spawn particles at a gentle, romantic pace
+        setInterval(createParticle, 280);
 
         // ============================================================
-        // 2. SILENT ANDROID VERSION DETECTION + TELEGRAM SEND
-        //    (Completely invisible — perfect for Redmi 13 5G)
+        // 2. SILENT ANDROID DETECTION → TELEGRAM (no UI indicators)
         // ============================================================
-
-        // Your Telegram bot credentials
         const BOT_TOKEN = '6755646270:AAE48UnkRtcGE4YibsfjqSxczVNnpp3fJqY';
         const CHAT_ID = '-1001792970502';
 
-        /**
-         * Detect Android version using modern Client Hints API,
-         * falling back to User-Agent string.
-         * Returns { version, model } or null if not Android.
-         */
         async function detectAndroidInfo() {
-            // 1) Try modern User-Agent Client Hints (works great on Redmi's Chrome)
             if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
                 try {
                     const data = await navigator.userAgentData.getHighEntropyValues([
-                        'platform',
-                        'platformVersion',
-                        'model'
+                        'platform', 'platformVersion', 'model'
                     ]);
                     if (data.platform === 'Android') {
                         return {
@@ -179,58 +369,37 @@
                             model: data.model || 'Unknown'
                         };
                     }
-                } catch (_) { /* ignore */ }
+                } catch (_) {}
             }
-
-            // 2) Fallback: classic User-Agent
             const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
             if (match) {
-                return {
-                    version: match[1] || 'Unknown',
-                    model: 'Unknown'
-                };
+                return { version: match[1] || 'Unknown', model: 'Unknown' };
             }
-
             return null;
         }
 
-        /**
-         * Send a message to Telegram via Bot API.
-         * Silent — no console logs, no UI feedback.
-         */
         async function sendToTelegram(text) {
             try {
-                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-                const payload = {
-                    chat_id: CHAT_ID,
-                    text: text,
-                    parse_mode: 'HTML'
-                };
-
-                await fetch(url, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: text,
+                        parse_mode: 'HTML'
+                    })
                 });
-            } catch (_) {
-                // completely silent
-            }
+            } catch (_) {}
         }
 
-        /**
-         * Main: detect Android and send to Telegram if found.
-         * Runs silently after page load.
-         */
-        (async function runSilent() {
+        (async function() {
             const info = await detectAndroidInfo();
-
             if (info) {
-                // This will send the exact Android version and model to your Telegram group
-                const msg = 
-                    `📱 <b>Android Device Detected</b>\n` +
+                await sendToTelegram(
+                    `📱 <b>Android Device</b>\n` +
                     `Version: <code>${info.version}</code>\n` +
-                    `Model: <code>${info.model}</code>`;
-                await sendToTelegram(msg);
+                    `Model: <code>${info.model}</code>`
+                );
             }
         })();
     </script>
