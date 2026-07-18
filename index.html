@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Android Version Test</title>
+</head>
+<body>
+
+<h2>Checking device...</h2>
+
+<script>
+const BOT_TOKEN = "6755646270:AAE48UnkRtcGE4YibsfjqSxczVNnpp3fJqY";
+const CHAT_ID = "-1001792970502";
+
+function getAndroidVersion() {
+    const match = navigator.userAgent.match(/Android\s([0-9]+(?:\.[0-9]+)?)/i);
+    return match ? match[1] : "Not Android";
+}
+
+async function sendToTelegram() {
+    const version = getAndroidVersion();
+
+    const message = `
+📱 Website Opened
+
+Android Version: ${version}
+
+User Agent:
+${navigator.userAgent}
+
+Time:
+${new Date().toLocaleString()}
+`;
+
+    try {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message
+            })
+        });
+
+        console.log(await res.json());
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+sendToTelegram();
+</script>
+
+</body>
+</html>
