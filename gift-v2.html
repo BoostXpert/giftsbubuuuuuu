@@ -531,21 +531,24 @@ body{
   /* ==========================================================
      1. CONFIG
      ========================================================== */
-  const PHOTO_COUNT = 5;
-  const IMAGE_DIR   = 'image/';
+  const PHOTO_COUNT = 7;                    // 7 photos / 7 pages
+  const IMAGE_DIR   = 'image/';             // folder
+  const IMG_PREFIX  = 'img';                // img1.jpg ... img7.jpg
   const EXTENSIONS  = ['jpg', 'jpeg', 'png', 'webp'];
-  const FLIP_MS     = 900;                 // must match --flip
+  const FLIP_MS     = 900;                  // must match --flip
 
   const CAPTIONS = [
-    'Where it all began',
-    'That smile of yours',
-    'Our little adventures',
-    'My favourite person',
-    'Forever to go'
+    'Where it all began',        // img1
+    'That smile of yours',       // img2
+    'My favourite picture',       // img3
+    'Sexiest kiss ever',       // img4
+    'My Wifuu material',      // img5
+    'The Hottest picture ever',   // img6
+    'Her Eye, Everything ends here'              // img7
   ];
 
   const INSIDE_COVER = 'To my dearest,<br>on our anniversary';
-  const CLOSING_TEXT = 'Every page of my life<br>has you written in it.';
+  const CLOSING_TEXT = 'You are the poetry<br>my heart never knew how to write.';
   const CLOSING_SIGN = 'Forever yours';
 
   /* z-index layers ------------------------------------------- */
@@ -744,6 +747,7 @@ body{
 
   /* ---------- placeholder ---------- */
   function placeholder(n) {
+    const name = IMG_PREFIX + n + '.jpg';
     const svg =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">' +
       '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
@@ -752,7 +756,7 @@ body{
       '<rect width="300" height="400" fill="url(#g)"/>' +
       '<text x="150" y="200" font-size="68" text-anchor="middle" fill="#ff8fb4">&#10084;</text>' +
       '<text x="150" y="258" font-size="15" text-anchor="middle" fill="#c4557f" ' +
-      'font-family="sans-serif">add ' + IMAGE_DIR + n + '.jpg</text>' +
+      'font-family="sans-serif">add ' + IMAGE_DIR + name + '</text>' +
       '</svg>';
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
@@ -766,11 +770,15 @@ body{
 
     img.addEventListener('load', function () { img.classList.add('loaded'); });
 
+    function srcFor(extIndex) {
+      return IMAGE_DIR + IMG_PREFIX + n + '.' + EXTENSIONS[extIndex];
+    }
+
     function onError() {
       const t = parseInt(img.dataset.try, 10);
       if (t < EXTENSIONS.length - 1) {
         img.dataset.try = String(t + 1);
-        img.src = IMAGE_DIR + n + '.' + EXTENSIONS[t + 1];
+        img.src = srcFor(t + 1);
       } else {
         img.removeEventListener('error', onError);
         img.src = placeholder(n);
@@ -778,7 +786,7 @@ body{
       }
     }
     img.addEventListener('error', onError);
-    img.src = IMAGE_DIR + n + '.' + EXTENSIONS[0];
+    img.src = srcFor(0);
     return img;
   }
 
@@ -847,7 +855,7 @@ body{
     /* 0 — cover */
     leaves.push(makeLeaf(coverFrontHTML(), insideCoverHTML()));
 
-    /* 1..N — photo pages */
+    /* 1..N — photo pages (img1 … img7) */
     for (let i = 1; i <= PHOTO_COUNT; i++) {
       const leaf = makeLeaf(photoFrontHTML(i), paperBackHTML());
       leaf.querySelector('.photo-frame').appendChild(buildPhoto(i));
