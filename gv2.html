@@ -84,7 +84,6 @@ button{ font:inherit; color:inherit; }
   background:radial-gradient(ellipse at 50% 42%, transparent 26%, rgba(6,1,8,.78) 100%);
 }
 
-/* canvas particle layer */
 .fx{
   position:fixed; inset:0; z-index:2;
   pointer-events:none;
@@ -550,7 +549,6 @@ button{ font:inherit; color:inherit; }
   background:linear-gradient(180deg,rgba(20,3,14,.3),rgba(20,3,14,.85));
 }
 
-/* lightbox */
 .lightbox{
   position:fixed; inset:0; z-index:60;
   display:flex; flex-direction:column;
@@ -742,7 +740,6 @@ button{ font:inherit; color:inherit; }
 .env-seal svg{ width:20px; height:20px; fill:#ffe3ec; }
 .envelope.open .env-seal{ opacity:0; transform:translateX(-50%) scale(.4); }
 
-/* the actual letter panel */
 .letter-panel{
   position:absolute; inset:0;
   display:flex; flex-direction:column;
@@ -951,7 +948,7 @@ button{ font:inherit; color:inherit; }
 <!-- ================= STAGE ================= -->
 <main class="stage" id="stage">
 
-  <!-- ---------- 0 · INTRO ---------- -->
+  <!-- 0 · INTRO -->
   <section class="scene" data-scene="intro" aria-hidden="false">
     <div class="scene-inner">
       <svg class="intro-heart" data-anim viewBox="0 0 100 100" aria-hidden="true">
@@ -965,75 +962,55 @@ button{ font:inherit; color:inherit; }
     </div>
   </section>
 
-  <!-- ---------- 1 · HEART ---------- -->
+  <!-- 1 · HEART -->
   <section class="scene" data-scene="heart" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter One</p>
       <h2 class="title sm">Tap The Heart</h2>
-
       <button class="heart-btn" id="bigHeart" aria-label="Tap the heart to reveal a message">
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <path d="M50,88 C20,70 5,50 5,35 C5,20 17,10 30,10 C40,10 47,16 50,23 C53,16 60,10 70,10 C83,10 95,20 95,35 C95,50 80,70 50,88 Z"
                 fill="url(#hgSoft)" filter="url(#hGlow)"/>
         </svg>
       </button>
-
       <p class="love-msg" id="loveMsg"></p>
       <p class="msg-count" id="msgCount"></p>
-
       <button class="btn ghost btn-wrap" id="heartNext" data-go="tree">Continue</button>
     </div>
   </section>
 
-  <!-- ---------- 2 · TREE ---------- -->
+  <!-- 2 · TREE -->
   <section class="scene" data-scene="tree" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter Two</p>
-
       <svg class="tree-svg" id="treeSvg" viewBox="0 0 420 470" aria-hidden="true">
         <ellipse cx="210" cy="446" rx="120" ry="16" fill="rgba(255,140,175,.14)"/>
         <ellipse class="seed" cx="210" cy="432" rx="13" ry="9" fill="#c98b8b"/>
-
-        <path class="draw-path trunk" style="stroke-width:9" stroke="url(#barkGrad)"
-              d="M210,432 C204,392 216,350 210,300"/>
-        <path class="draw-path branch" style="stroke-width:5.5" stroke="url(#barkGrad)"
-              d="M210,342 C188,328 170,308 160,282"/>
-        <path class="draw-path branch" style="stroke-width:5.5" stroke="url(#barkGrad)"
-              d="M210,338 C234,324 250,304 260,278"/>
-        <path class="draw-path branch" style="stroke-width:5" stroke="url(#barkGrad)"
-              d="M210,302 C194,286 182,266 178,240"/>
-        <path class="draw-path branch" style="stroke-width:5" stroke="url(#barkGrad)"
-              d="M210,298 C226,282 238,262 244,238"/>
-        <path class="draw-path branch" style="stroke-width:4.5" stroke="url(#barkGrad)"
-              d="M210,302 C208,278 206,252 210,228"/>
-        <path class="draw-path twig" style="stroke-width:3.4" stroke="url(#barkGrad)"
-              d="M160,282 C150,272 144,262 142,250"/>
-        <path class="draw-path twig" style="stroke-width:3.4" stroke="url(#barkGrad)"
-              d="M260,278 C270,268 276,258 278,246"/>
-        <path class="draw-path twig" style="stroke-width:3" stroke="url(#barkGrad)"
-              d="M178,240 C170,232 166,222 166,212"/>
-        <path class="draw-path twig" style="stroke-width:3" stroke="url(#barkGrad)"
-              d="M244,238 C252,230 256,220 256,210"/>
-        <path class="draw-path twig" style="stroke-width:2.8" stroke="url(#barkGrad)"
-              d="M210,228 C202,218 198,210 198,200"/>
-        <path class="draw-path twig" style="stroke-width:2.8" stroke="url(#barkGrad)"
-              d="M210,228 C218,218 222,210 222,200"/>
-
+        <path class="draw-path trunk" style="stroke-width:9" stroke="url(#barkGrad)" d="M210,432 C204,392 216,350 210,300"/>
+        <path class="draw-path branch" style="stroke-width:5.5" stroke="url(#barkGrad)" d="M210,342 C188,328 170,308 160,282"/>
+        <path class="draw-path branch" style="stroke-width:5.5" stroke="url(#barkGrad)" d="M210,338 C234,324 250,304 260,278"/>
+        <path class="draw-path branch" style="stroke-width:5" stroke="url(#barkGrad)" d="M210,302 C194,286 182,266 178,240"/>
+        <path class="draw-path branch" style="stroke-width:5" stroke="url(#barkGrad)" d="M210,298 C226,282 238,262 244,238"/>
+        <path class="draw-path branch" style="stroke-width:4.5" stroke="url(#barkGrad)" d="M210,302 C208,278 206,252 210,228"/>
+        <path class="draw-path twig" style="stroke-width:3.4" stroke="url(#barkGrad)" d="M160,282 C150,272 144,262 142,250"/>
+        <path class="draw-path twig" style="stroke-width:3.4" stroke="url(#barkGrad)" d="M260,278 C270,268 276,258 278,246"/>
+        <path class="draw-path twig" style="stroke-width:3" stroke="url(#barkGrad)" d="M178,240 C170,232 166,222 166,212"/>
+        <path class="draw-path twig" style="stroke-width:3" stroke="url(#barkGrad)" d="M244,238 C252,230 256,220 256,210"/>
+        <path class="draw-path twig" style="stroke-width:2.8" stroke="url(#barkGrad)" d="M210,228 C202,218 198,210 198,200"/>
+        <path class="draw-path twig" style="stroke-width:2.8" stroke="url(#barkGrad)" d="M210,228 C218,218 222,210 222,200"/>
         <g id="treeFlowers"></g>
         <g id="treeHearts"></g>
       </svg>
-
       <p class="script" id="treeMsg">Just like this tree, my love for you keeps growing every day.</p>
       <button class="btn ghost btn-wrap" id="treeNext" data-go="gift">Continue</button>
     </div>
   </section>
 
-  <!-- ---------- 3 · GIFT ---------- -->
+  <!-- 3 · GIFT -->
   <section class="scene" data-scene="gift" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter Three</p>
       <h2 class="title sm">A Little Gift For You</h2>
-
       <button class="gift-btn" id="giftBtn" aria-label="Open the gift box">
         <span class="gift-halo" aria-hidden="true"></span>
         <span class="gift" aria-hidden="true">
@@ -1043,25 +1020,22 @@ button{ font:inherit; color:inherit; }
           </span>
         </span>
       </button>
-
       <p class="gift-msg" id="giftMsg"></p>
       <button class="btn ghost btn-wrap" id="giftNext" data-go="rose">Continue</button>
     </div>
   </section>
 
-  <!-- ---------- 4 · ROSE ---------- -->
+  <!-- 4 · ROSE -->
   <section class="scene" data-scene="rose" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter Four</p>
-
       <svg class="rose-svg" id="roseSvg" viewBox="0 0 400 330" aria-hidden="true"></svg>
-
       <p class="rose-msg" id="roseMsg">A rose for the most beautiful person in my life.</p>
       <button class="btn ghost btn-wrap" id="roseNext" data-go="gallery">Continue</button>
     </div>
   </section>
 
-  <!-- ---------- 5 · GALLERY ---------- -->
+  <!-- 5 · GALLERY -->
   <section class="scene" data-scene="gallery" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow gallery-head">Chapter Five</p>
@@ -1072,12 +1046,11 @@ button{ font:inherit; color:inherit; }
     </div>
   </section>
 
-  <!-- ---------- 6 · DOOR ---------- -->
+  <!-- 6 · DOOR -->
   <section class="scene" data-scene="door" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter Six</p>
       <h2 class="title sm">There Is One More Surprise Waiting For You</h2>
-
       <div class="door-wrap">
         <div class="door-frame" id="doorFrame">
           <div class="door-light" aria-hidden="true"></div>
@@ -1087,17 +1060,15 @@ button{ font:inherit; color:inherit; }
           <span class="door-knob r" aria-hidden="true"></span>
         </div>
       </div>
-
       <p class="body-text" id="doorHint">Go on… open it.</p>
     </div>
   </section>
 
-  <!-- ---------- 7 · LETTER ---------- -->
+  <!-- 7 · LETTER -->
   <section class="scene" data-scene="letter" aria-hidden="true">
     <div class="scene-inner">
       <p class="eyebrow">Chapter Seven</p>
       <h2 class="title sm">A Letter From My Heart</h2>
-
       <div class="envelope-wrap">
         <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open the love letter">
           <div class="env-back"></div>
@@ -1110,10 +1081,7 @@ button{ font:inherit; color:inherit; }
           <div class="env-seal"><svg aria-hidden="true"><use href="#heartSym"/></svg></div>
         </div>
       </div>
-
       <button class="btn ghost btn-wrap" id="letterNext" data-go="final" style="opacity:0;pointer-events:none">One Last Thing</button>
-
-      <!-- letter reading panel -->
       <div class="letter-panel" id="letterPanel" aria-hidden="true">
         <div class="letter-paper">
           <p class="letter-greet" id="letterGreet"></p>
@@ -1125,18 +1093,15 @@ button{ font:inherit; color:inherit; }
     </div>
   </section>
 
-  <!-- ---------- 8 · FINAL ---------- -->
+  <!-- 8 · FINAL -->
   <section class="scene" data-scene="final" aria-hidden="true">
     <div class="scene-inner">
       <p class="final-pre" id="finalPre">One Last Thing…</p>
-
       <h2 class="final-big gradient-text" id="finalBig">I LOVE YOU ❤️</h2>
-
       <svg class="final-heart" id="finalHeart" viewBox="0 0 100 100" aria-hidden="true" style="opacity:0">
         <path d="M50,88 C20,70 5,50 5,35 C5,20 17,10 30,10 C40,10 47,16 50,23 C53,16 60,10 70,10 C83,10 95,20 95,35 C95,50 80,70 50,88 Z"
               fill="url(#hgMain)" filter="url(#hGlow)"/>
       </svg>
-
       <p class="final-sub" id="finalSub"></p>
     </div>
   </section>
@@ -1155,14 +1120,11 @@ button{ font:inherit; color:inherit; }
 
 <script>
 /* =========================================================
-   ⚙️  CONFIGURATION — change everything here
+   ⚙️  CONFIGURATION
    ========================================================= */
 const CONFIG = {
-
-  /* Her name */
   herName: "Aryuuuu",
 
-  /* Messages revealed one-by-one when she taps the heart */
   heartMessages: [
     "You are my favourite hello and my hardest goodbye.",
     "Somehow, you make ordinary days feel like a celebration.",
@@ -1172,13 +1134,9 @@ const CONFIG = {
     "And I would choose you. In a hundred lifetimes, in any version of reality."
   ],
 
-  /* Message revealed inside the gift box */
   giftMessage:
     "Inside this little box is the one thing I could never wrap — my whole heart. It has been yours for a while now.",
 
-  /* Photo gallery — base paths WITHOUT extension.
-     The code auto-tries .jpg, .jpeg, .png, .webp for each.
-     Files: image/image1.* through image/image6.* */
   gallery: [
     { src: "image/image1", caption: "Noor-e-Nazar" },
     { src: "image/image2", caption: "Jaan-e-Jahaan" },
@@ -1188,7 +1146,6 @@ const CONFIG = {
     { src: "image/image6", caption: "Shab-e-Arzoo" }
   ],
 
-  /* The love letter */
   letter: {
     greeting: "My dearest Aryuuuu,",
     body:
@@ -1196,14 +1153,12 @@ const CONFIG = {
     signature: "Forever yours ❤️"
   },
 
-  /* Final screen */
   final: {
     pre: "One Last Thing…",
     big: "I LOVE YOU IN EVERY UNIVERSE",
     sub: "Today, tomorrow, and every day after that."
   },
 
-  /* Your song */
   musicUrl: "audio/audio.mp3"
 };
 
@@ -1217,15 +1172,10 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouch = matchMedia("(hover: none)").matches;
 
-/* Extensions tried in order when a gallery image is loaded.
-   So "image/image1" will try .jpg → .jpeg → .png → .webp → .gif */
 const IMG_EXTS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".JPG", ".JPEG", ".PNG"];
 
 /* =========================================================
-   🎵 AUDIO ENGINE
-   - background track from CONFIG.musicUrl
-   - procedural UI sound effects
-   - mute / unmute
+   🎵 SOUND ENGINE — FIXED
    ========================================================= */
 const Sound = (() => {
   let ctx = null, master = null, sfxBus = null, delay = null;
@@ -1237,7 +1187,7 @@ const Sound = (() => {
     if (ctx) return ctx;
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
-    ctx = new AC();
+    try { ctx = new AC(); } catch (e) { return null; }
 
     master = ctx.createGain();
     master.gain.value = 0.9;
@@ -1247,7 +1197,6 @@ const Sound = (() => {
     sfxBus.gain.value = 0.55;
     sfxBus.connect(master);
 
-    /* simple feedback delay for space */
     delay = ctx.createDelay(1.0);
     delay.delayTime.value = 0.34;
     const fb = ctx.createGain();
@@ -1260,7 +1209,6 @@ const Sound = (() => {
     fb.connect(delay);
     damp.connect(sfxBus);
 
-    /* noise buffer for whooshes */
     const len = ctx.sampleRate * 0.9;
     noiseBuffer = ctx.createBuffer(1, len, ctx.sampleRate);
     const d = noiseBuffer.getChannelData(0);
@@ -1269,29 +1217,74 @@ const Sound = (() => {
     return ctx;
   }
 
+  function resumeCtx() {
+    if (ctx && ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+  }
+
+  function onAudioError() {
+    let resolved = CONFIG.musicUrl;
+    try { resolved = new URL(CONFIG.musicUrl, location.href).href; } catch (e) {}
+    console.error(
+      "%c[Sound] ❌ Audio failed to load",
+      "color:#ff5c85;font-weight:bold",
+      "\n  Configured path:", CONFIG.musicUrl,
+      "\n  Resolved to:", resolved,
+      "\n  Check that the file exists at that path."
+    );
+    externalAudio = null;
+    musicStarted = false;
+  }
+
   function startMusic() {
     if (musicStarted) return;
-    if (!ensureCtx()) return;
-    if (ctx.state === "suspended") ctx.resume();
 
-    if (CONFIG.musicUrl) {
-      externalAudio = new Audio(CONFIG.musicUrl);
-      externalAudio.loop = true;
-      externalAudio.volume = muted ? 0 : 0.55;
-      externalAudio.play().catch(() => {
-        externalAudio = null;
-        musicStarted = false;
-      });
+    ensureCtx();
+    resumeCtx();
+
+    if (!CONFIG.musicUrl) {
       musicStarted = true;
       return;
     }
 
-    musicStarted = true;
+    /* Reuse the audio element across retries */
+    if (!externalAudio) {
+      const audio = new Audio();
+      audio.preload = "auto";
+      audio.loop = true;
+      audio.addEventListener("error", onAudioError, { once: true });
+      audio.src = CONFIG.musicUrl;
+      externalAudio = audio;
+    }
+
+    externalAudio.volume = muted ? 0 : 0.55;
+
+    try {
+      const p = externalAudio.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          console.log(
+            "%c[Sound] ✓ Music playing",
+            "color:#6ee7b7;font-weight:bold"
+          );
+          musicStarted = true;
+        }).catch(err => {
+          /* Autoplay may be blocked; keep externalAudio so next user
+             gesture retries with the same element. */
+          console.warn("[Sound] Play blocked:", err && (err.name || err.message));
+        });
+      } else {
+        musicStarted = true;
+      }
+    } catch (e) {
+      console.error("[Sound] Unexpected error:", e);
+    }
   }
 
   function sfx(kind = "chime") {
     if (!ensureCtx() || muted) return;
-    if (ctx.state === "suspended") ctx.resume();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
     const t = ctx.currentTime;
 
     if (kind === "chime") {
@@ -1352,24 +1345,58 @@ const Sound = (() => {
   }
 
   function setMuted(v) {
-    muted = v;
-    if (!ctx) { if (!v) startMusic(); return; }
-    if (ctx.state === "suspended") ctx.resume();
+    muted = !!v;
+    ensureCtx();
+    resumeCtx();
 
-    const target = v ? 0.0001 : 0.9;
-    master.gain.cancelScheduledValues(ctx.currentTime);
-    master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(target, ctx.currentTime + 0.35);
-
-    if (externalAudio) externalAudio.volume = v ? 0 : 0.55;
-    if (!v && !musicStarted) startMusic();
+    if (ctx) {
+      const target = muted ? 0.0001 : 0.9;
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
+      master.gain.exponentialRampToValueAtTime(target, ctx.currentTime + 0.35);
+    }
+    if (externalAudio) externalAudio.volume = muted ? 0 : 0.55;
+    if (!muted && !musicStarted) startMusic();
   }
 
-  return { startMusic, sfx, setMuted, get muted() { return muted; } };
+  function test() {
+    if (!CONFIG.musicUrl) {
+      console.warn("[Sound] No musicUrl set in CONFIG.");
+      return;
+    }
+    let resolved = CONFIG.musicUrl;
+    try { resolved = new URL(CONFIG.musicUrl, location.href).href; } catch (e) {}
+    console.log("[Sound] Testing:", resolved);
+
+    const a = new Audio();
+    a.volume = 0;
+    a.addEventListener("loadeddata", () =>
+      console.log("%c[Sound] ✓ File loaded OK", "color:#6ee7b7"));
+    a.addEventListener("error", () =>
+      console.error("%c[Sound] ✗ File failed to load", "color:#ff5c85"));
+    a.src = CONFIG.musicUrl;
+    a.play()
+      .then(() => console.log("[Sound] ✓ Play test succeeded"))
+      .catch(e => console.warn("[Sound] Play test failed:", e.message));
+  }
+
+  return {
+    startMusic,
+    sfx,
+    setMuted,
+    test,
+    get muted() { return muted; },
+    get isPlaying() {
+      return !!(externalAudio && musicStarted && !externalAudio.paused);
+    }
+  };
 })();
 
+/* Expose to console for debugging */
+window.testAudio = () => Sound.test();
+
 /* =========================================================
-   ✨ PARTICLE FX ENGINE (canvas)
+   ✨ PARTICLE FX ENGINE
    ========================================================= */
 const FX = (() => {
   const canvas = document.getElementById("fx");
@@ -1470,7 +1497,6 @@ const FX = (() => {
 
   function makeAmbient(type) {
     const cfg = TYPE[type];
-    const size = rand(cfg.size[0], cfg.size[1]);
     return {
       type, burst: false,
       baseX: rand(-60, W + 60),
@@ -1483,7 +1509,7 @@ const FX = (() => {
       phaseSpeed: rand(0.5, 1.4),
       rot: rand(0, Math.PI * 2),
       vr: rand(-cfg.spin, cfg.spin),
-      size,
+      size: rand(cfg.size[0], cfg.size[1]),
       alpha: rand(0.35, 0.95),
       twinkle: type === "spark" ? rand(1.2, 3.2) : 0,
       sprite: pickSprite(type)
@@ -1520,8 +1546,7 @@ const FX = (() => {
         rot: rand(0, 6.28),
         vr: rand(-7, 7),
         size: rand(cfg.size[0], cfg.size[1]) * 1.15,
-        alpha: 1,
-        life, maxLife: life,
+        alpha: 1, life, maxLife: life,
         sprite: pickSprite(type)
       });
     }
@@ -1529,16 +1554,13 @@ const FX = (() => {
 
   function update(dt) {
     const m = MODES[mode] || MODES.intro;
-
     if (!REDUCED) {
       for (const k in m) {
         if (Math.random() < m[k] * dt * 5.5) spawnAmbient(k);
       }
     }
-
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
-
       if (p.burst) {
         p.vy += 250 * dt;
         p.vx *= 0.988;
@@ -1554,7 +1576,6 @@ const FX = (() => {
         p.x = p.baseX + Math.sin(p.phase) * p.sway;
         p.y += p.vy * dt;
         p.rot += p.vr * dt;
-
         if (p.vy < 0 && p.y < -100) resetAmbient(p);
         if (p.vy > 0 && p.y > H + 110) resetAmbient(p);
         if (p.baseX < -140) p.baseX = W + 100;
@@ -1568,9 +1589,7 @@ const FX = (() => {
     for (let i = 0; i < parts.length; i++) {
       const p = parts[i];
       let a = p.alpha;
-      if (p.type === "spark" && !p.burst) {
-        a *= 0.55 + 0.45 * Math.sin(t * p.twinkle + p.phase);
-      }
+      if (p.type === "spark" && !p.burst) a *= 0.55 + 0.45 * Math.sin(t * p.twinkle + p.phase);
       if (a <= 0.01) continue;
       ctx.globalAlpha = a;
       ctx.save();
@@ -1610,12 +1629,10 @@ const FX = (() => {
       resize();
       parts = parts.filter(p => p.burst || (p.y > -200 && p.y < H + 200));
     }, { passive: true });
-
     document.addEventListener("visibilitychange", () => {
       paused = document.hidden;
       if (!paused) lastT = performance.now();
     });
-
     if (!running) {
       running = true;
       lastT = performance.now();
@@ -1706,7 +1723,7 @@ function goTo(idx) {
 }
 
 /* =========================================================
-   🎭 SCENE ENTRY HANDLERS
+   🎭 ENTER HANDLERS
    ========================================================= */
 const ENTER = {};
 
@@ -1735,7 +1752,6 @@ ENTER.heart = function () {
   gsap.set(loveMsg, { opacity: 0, y: 0 });
   msgCount.textContent = "";
   gsap.set(heartNext, { opacity: 0, y: 12, pointerEvents: "none" });
-
   gsap.fromTo(bigHeart,
     { scale: 0.6, opacity: 0 },
     { scale: 1, opacity: 1, duration: 1.1, ease: "elastic.out(1, .55)" }
@@ -1757,11 +1773,7 @@ bigHeart.addEventListener("click", () => {
   const r = bigHeart.getBoundingClientRect();
   const cx = r.left + r.width / 2;
   const cy = r.top + r.height / 2;
-
-  gsap.fromTo(bigHeart, { scale: 1 }, {
-    scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out"
-  });
-
+  gsap.fromTo(bigHeart, { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out" });
   FX.burst(cx, cy, 12, "heart");
   FX.burst(cx, cy, 8, "spark");
   Sound.sfx("chime");
@@ -1798,36 +1810,30 @@ const FLOWER_POS = [
   [198, 200], [222, 200], [178, 240], [244, 238],
   [160, 282], [260, 278], [210, 228]
 ];
-
 const FLOWER_COLORS = ["#ffb3c9", "#ff8fb0", "#ffd1de", "#ff7096", "#ffc2d4"];
 
 function buildTreeDecor() {
   if (treeFlowers.childElementCount) return;
-
   FLOWER_POS.forEach((pos, i) => {
     const outer = document.createElementNS(NS, "g");
     outer.setAttribute("transform", `translate(${pos[0]},${pos[1]})`);
-
     const bloom = document.createElementNS(NS, "g");
     bloom.setAttribute("class", "bloom");
-
     const color = FLOWER_COLORS[i % FLOWER_COLORS.length];
-    const petalCount = 5;
-    for (let p = 0; p < petalCount; p++) {
+    for (let p = 0; p < 5; p++) {
       const e = document.createElementNS(NS, "ellipse");
       e.setAttribute("rx", "7.2");
       e.setAttribute("ry", "9.2");
       e.setAttribute("cy", "-6.4");
       e.setAttribute("fill", color);
       e.setAttribute("opacity", "0.95");
-      e.setAttribute("transform", `rotate(${(360 / petalCount) * p})`);
+      e.setAttribute("transform", `rotate(${(360 / 5) * p})`);
       bloom.appendChild(e);
     }
     const core = document.createElementNS(NS, "circle");
     core.setAttribute("r", "3.2");
     core.setAttribute("fill", "#fff2f6");
     bloom.appendChild(core);
-
     outer.appendChild(bloom);
     treeFlowers.appendChild(outer);
   });
@@ -1839,19 +1845,14 @@ function buildTreeDecor() {
   heartSpots.forEach((pos, i) => {
     const outer = document.createElementNS(NS, "g");
     outer.setAttribute("transform", `translate(${pos[0]},${pos[1]})`);
-
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "tree-heart");
-
     const use = document.createElementNS(NS, "use");
     use.setAttribute("href", "#heartSym");
-    use.setAttribute("x", "-9");
-    use.setAttribute("y", "-9");
-    use.setAttribute("width", "18");
-    use.setAttribute("height", "18");
+    use.setAttribute("x", "-9"); use.setAttribute("y", "-9");
+    use.setAttribute("width", "18"); use.setAttribute("height", "18");
     use.setAttribute("fill", i % 2 ? "#ff9dba" : "#ffd1de");
     use.setAttribute("opacity", "0.85");
-
     g.appendChild(use);
     outer.appendChild(g);
     treeHeartsG.appendChild(outer);
@@ -1862,7 +1863,6 @@ let treeTl = null;
 
 ENTER.tree = function () {
   buildTreeDecor();
-
   const draws = $$(".draw-path", treeSvg);
   const seed = $(".seed", treeSvg);
   const blooms = $$(".bloom", treeSvg);
@@ -1886,20 +1886,14 @@ ENTER.tree = function () {
   const twigs = $$(".twig", treeSvg);
 
   treeTl = gsap.timeline({ delay: 0.25 });
-
   treeTl
-    .fromTo(seed, { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(2.2)" })
+    .fromTo(seed, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(2.2)" })
     .to(seed, { scale: 0.35, opacity: 0, duration: 0.5, ease: "power2.in" }, "+=0.45")
     .to(trunk, { strokeDashoffset: 0, duration: 1.15, ease: "power2.inOut" }, "-=0.45")
     .to(branches, { strokeDashoffset: 0, duration: 0.85, stagger: 0.09, ease: "power2.out" }, "-=0.6")
     .to(twigs, { strokeDashoffset: 0, duration: 0.6, stagger: 0.05, ease: "power2.out" }, "-=0.55")
-    .to(blooms, {
-      scale: 1, opacity: 1, duration: 0.9, stagger: 0.055, ease: "elastic.out(1, .62)"
-    }, "-=0.35")
-    .to(hearts, {
-      scale: 1, opacity: 1, duration: 0.7, stagger: 0.05, ease: "back.out(2.4)"
-    }, "-=0.55")
+    .to(blooms, { scale: 1, opacity: 1, duration: 0.9, stagger: 0.055, ease: "elastic.out(1, .62)" }, "-=0.35")
+    .to(hearts, { scale: 1, opacity: 1, duration: 0.7, stagger: 0.05, ease: "back.out(2.4)" }, "-=0.55")
     .to(treeMsg, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.45")
     .to(treeNext, {
       opacity: 1, y: 0, duration: 0.55, ease: "power2.out",
@@ -1913,10 +1907,7 @@ ENTER.tree = function () {
   gsap.to(seed, {
     duration: 0.001,
     onComplete() {
-      gsap.to(hearts, {
-        y: -8, duration: 2.4, ease: "sine.inOut",
-        yoyo: true, repeat: -1, stagger: 0.22
-      });
+      gsap.to(hearts, { y: -8, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: -1, stagger: 0.22 });
     }
   });
 };
@@ -1939,7 +1930,6 @@ ENTER.gift = function () {
   gsap.set(giftNext, { opacity: 0, y: 12 });
   gsap.set(giftHalo, { opacity: 1 });
   giftNext.style.pointerEvents = "none";
-
   gsap.to(giftBtn, { opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.1 });
 };
 
@@ -1948,19 +1938,15 @@ giftBtn.addEventListener("click", () => {
   giftOpened = true;
   giftBtn.classList.add("opened");
   Sound.sfx("open");
-
   gsap.killTweensOf(giftBtn);
   gsap.set(giftBtn, { y: 0 });
-
   const r = giftBtn.getBoundingClientRect();
   const cx = r.left + r.width / 2;
   const cy = r.top + r.height * 0.18;
 
   gsap.timeline()
     .to(giftBtn, { scale: 1.08, duration: 0.16, yoyo: true, repeat: 1, ease: "power2.out" })
-    .to(giftLid, {
-      rotateX: -128, y: -14, duration: 1.05, ease: "back.out(1.5)"
-    }, "-=0.05")
+    .to(giftLid, { rotateX: -128, y: -14, duration: 1.05, ease: "back.out(1.5)" }, "-=0.05")
     .add(() => {
       FX.burst(cx, cy, 26, "heart");
       FX.burst(cx, cy, 20, "spark");
@@ -2007,14 +1993,12 @@ function buildRose(x, y, scale) {
 
   const bloom = document.createElementNS(NS, "g");
   bloom.setAttribute("class", "rose-bloom");
-
   const layers = [
     { n: 8, rx: 23, ry: 17, d: 16, fill: "url(#roseDark)", r0: 0 },
     { n: 7, rx: 18, ry: 13, d: 11, fill: "url(#roseMid)", r0: 24 },
     { n: 6, rx: 13, ry: 9,  d: 7,  fill: "url(#roseLight)", r0: 46 },
     { n: 4, rx: 7,  ry: 5,  d: 3,  fill: "#ffb3c0", r0: 72 }
   ];
-
   layers.forEach(L => {
     for (let i = 0; i < L.n; i++) {
       const e = document.createElementNS(NS, "ellipse");
@@ -2027,12 +2011,10 @@ function buildRose(x, y, scale) {
       bloom.appendChild(e);
     }
   });
-
   const core = document.createElementNS(NS, "circle");
   core.setAttribute("r", "4");
   core.setAttribute("fill", "#ffd7e0");
   bloom.appendChild(core);
-
   outer.appendChild(bloom);
   return outer;
 }
@@ -2047,17 +2029,13 @@ function buildRoses() {
 ENTER.rose = function () {
   buildRoses();
   const blooms = $$(".rose-bloom", roseSvg);
-
   gsap.killTweensOf(blooms);
   gsap.set(blooms, { scale: 0, opacity: 0, rotate: -22 });
   gsap.set([roseMsg, roseNext], { opacity: 0, y: 18 });
   roseNext.style.pointerEvents = "none";
 
   gsap.timeline({ delay: 0.15 })
-    .to(blooms, {
-      scale: 1, opacity: 1, rotate: 0,
-      duration: 1.25, stagger: 0.16, ease: "elastic.out(1, .58)"
-    })
+    .to(blooms, { scale: 1, opacity: 1, rotate: 0, duration: 1.25, stagger: 0.16, ease: "elastic.out(1, .58)" })
     .to(roseMsg, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.6")
     .to(roseNext, {
       opacity: 1, y: 0, duration: 0.55, ease: "power2.out",
@@ -2091,8 +2069,6 @@ function makePlaceholder(frame, i) {
   frame.appendChild(ph);
 }
 
-/* Resolves an <img>'s src by trying each extension in IMG_EXTS.
-   Calls onFail() if none work. */
 function resolveImageSrc(imgEl, basePath, onFail) {
   let ei = 0;
   const tryNext = () => {
@@ -2106,7 +2082,6 @@ function resolveImageSrc(imgEl, basePath, onFail) {
 
 function buildGallery() {
   if (galleryEl.childElementCount) return;
-
   CONFIG.gallery.forEach((item, i) => {
     const fig = document.createElement("figure");
     fig.className = "photo-card";
@@ -2147,7 +2122,6 @@ function buildGallery() {
     fig.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
     });
-
     galleryEl.appendChild(fig);
   });
 }
@@ -2191,17 +2165,11 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbo
 ENTER.gallery = function () {
   buildGallery();
   const cards = $$(".photo-card", galleryEl);
-
   gsap.killTweensOf(cards);
   gsap.set(cards, { opacity: 0, y: 34, scale: 0.95 });
   gsap.set(galleryNext, { opacity: 0, y: 14 });
   galleryNext.style.pointerEvents = "none";
-
-  gsap.to(cards, {
-    opacity: 1, y: 0, scale: 1,
-    duration: 0.75, stagger: 0.08, ease: "power3.out", delay: 0.15
-  });
-
+  gsap.to(cards, { opacity: 1, y: 0, scale: 1, duration: 0.75, stagger: 0.08, ease: "power3.out", delay: 0.15 });
   gsap.to(galleryNext, {
     opacity: 1, y: 0, duration: 0.55, delay: 0.65, ease: "power2.out",
     onStart() { galleryNext.style.pointerEvents = "auto"; }
@@ -2218,7 +2186,6 @@ ENTER.door = function () {
   doorFrame.classList.remove("open");
   gsap.set(doorFrame, { scale: 0.92, opacity: 0 });
   gsap.set(doorHint, { opacity: 0, y: 12 });
-
   gsap.to(doorFrame, { scale: 1, opacity: 1, duration: 0.9, ease: "power3.out", delay: 0.15 });
   gsap.to(doorHint, { opacity: 1, y: 0, duration: 0.6, delay: 0.7 });
 };
@@ -2278,7 +2245,6 @@ function typeText(el, text, speed = 26) {
 ENTER.letter = function () {
   letterOpened = false;
   clearInterval(typingTimer);
-
   envelope.classList.remove("open", "out");
   letterPanel.classList.remove("show");
   letterPanel.setAttribute("aria-hidden", "true");
@@ -2307,7 +2273,6 @@ function openEnvelope() {
   FX.burst(r.left + r.width / 2, r.top + r.height * 0.35, 18, "heart");
 
   envelope.classList.add("open");
-
   setTimeout(() => { envelope.classList.add("out"); }, 420);
 
   setTimeout(() => {
@@ -2362,29 +2327,19 @@ ENTER.final = function () {
   gsap.set(finalHeart, { opacity: 0, scale: 0.4 });
 
   finalTl = gsap.timeline({ delay: 0.35 });
-
   finalTl
     .to(finalPre, { opacity: 1, y: 0, duration: 1.15, ease: "power2.out" })
     .to(finalPre, { opacity: 0, y: -18, duration: 0.75, ease: "power2.in" }, "+=1.5")
-    .add(() => {
-      explodeScreen();
-      Sound.sfx("chime");
-    })
-    .to(finalBig, {
-      opacity: 1, scale: 1, duration: 1.5, ease: "elastic.out(1, .62)"
-    }, "-=0.35")
-    .to(finalHeart, {
-      opacity: 1, scale: 1, duration: 0.9, ease: "back.out(2)"
-    }, "-=1.0")
+    .add(() => { explodeScreen(); Sound.sfx("chime"); })
+    .to(finalBig, { opacity: 1, scale: 1, duration: 1.5, ease: "elastic.out(1, .62)" }, "-=0.35")
+    .to(finalHeart, { opacity: 1, scale: 1, duration: 0.9, ease: "back.out(2)" }, "-=1.0")
     .to(finalSub, { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" }, "-=0.7");
 
-  gsap.to(finalBig, {
-    y: -8, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2
-  });
+  gsap.to(finalBig, { y: -8, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2 });
 };
 
 /* =========================================================
-   🔗 GLOBAL NAV WIRING
+   🔗 GLOBAL NAV
    ========================================================= */
 $$("[data-go]").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -2394,7 +2349,6 @@ $$("[data-go]").forEach(btn => {
   });
 });
 
-/* keyboard arrows */
 document.addEventListener("keydown", e => {
   if (lightbox.classList.contains("open")) return;
   if (e.key === "ArrowRight" && currentIdx < sceneEls.length - 1) goTo(currentIdx + 1);
@@ -2402,21 +2356,46 @@ document.addEventListener("keydown", e => {
 });
 
 /* =========================================================
-   🎧 MUSIC BUTTON + FIRST INTERACTION
+   🎧 MUSIC BUTTON + FIRST INTERACTION (FIXED)
    ========================================================= */
 const musicBtn = document.getElementById("musicBtn");
 
-function firstInteraction() {
-  Sound.startMusic();
-  window.removeEventListener("pointerdown", firstInteraction);
-  window.removeEventListener("keydown", firstInteraction);
-}
-window.addEventListener("pointerdown", firstInteraction, { once: true });
-window.addEventListener("keydown", firstInteraction, { once: true });
+/* Fire startMusic on ANY interaction type — and keep retrying until it succeeds. */
+function armFirstInteraction() {
+  const events = ["pointerdown", "touchstart", "touchend", "click", "keydown", "mousedown"];
 
+  const handler = () => {
+    if (Sound.isPlaying) {
+      /* Music is confirmed playing — remove every listener */
+      events.forEach(ev => window.removeEventListener(ev, handler, true));
+      return;
+    }
+    /* Try again — if the previous attempt failed, this retries. */
+    Sound.startMusic();
+  };
+
+  events.forEach(ev =>
+    window.addEventListener(ev, handler, { capture: true, passive: true })
+  );
+}
+armFirstInteraction();
+
+/* Music button — "start" if not playing, "mute/unmute" only if playing. */
 musicBtn.addEventListener("click", e => {
   e.stopPropagation();
-  Sound.startMusic();
+
+  if (!Sound.isPlaying) {
+    /* First tap: start playing (unmuted). */
+    Sound.startMusic();
+    if (Sound.muted) {
+      Sound.setMuted(false);
+      musicBtn.classList.remove("muted");
+      musicBtn.setAttribute("aria-pressed", "true");
+    }
+    return;
+  }
+
+  /* Normal mute / unmute toggle. */
   const next = !Sound.muted;
   Sound.setMuted(next);
   musicBtn.classList.toggle("muted", next);
