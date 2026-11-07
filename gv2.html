@@ -836,6 +836,13 @@ button{ font:inherit; color:inherit; }
   letter-spacing:.02em;
   will-change:transform, opacity;
 }
+#finalBig{
+  font-size:clamp(1.55rem,7vw,3.4rem);
+  line-height:1.14;
+  max-width:16ch;
+  padding:0 6px;
+  text-wrap:balance;
+}
 .final-sub{
   margin:0;
   font-family:var(--script);
@@ -1131,8 +1138,6 @@ button{ font:inherit; color:inherit; }
       </svg>
 
       <p class="final-sub" id="finalSub"></p>
-
-      <button class="btn" id="replayBtn" style="opacity:0;pointer-events:none">Experience It Again</button>
     </div>
   </section>
 
@@ -1154,8 +1159,8 @@ button{ font:inherit; color:inherit; }
    ========================================================= */
 const CONFIG = {
 
-  /* Her name (used inside the letter) */
-  herName: "Aanya",
+  /* Her name */
+  herName: "Aryuuuu",
 
   /* Messages revealed one-by-one when she taps the heart */
   heartMessages: [
@@ -1171,35 +1176,35 @@ const CONFIG = {
   giftMessage:
     "Inside this little box is the one thing I could never wrap — my whole heart. It has been yours for a while now.",
 
-  /* Photo gallery. Put your own image URLs (or local paths like "photos/us-1.jpg")
-     in `src`. Leave it empty ("") to show a pretty gradient placeholder. */
+  /* Photo gallery — base paths WITHOUT extension.
+     The code auto-tries .jpg, .jpeg, .png, .webp for each.
+     Files: image/image1.* through image/image6.* */
   gallery: [
-    { src: "", caption: "The day everything changed" },
-    { src: "", caption: "Our first little adventure" },
-    { src: "", caption: "That laugh I fell in love with" },
-    { src: "", caption: "Rainy afternoons, warm hands" },
-    { src: "", caption: "Late night talks that never ended" },
-    { src: "", caption: "Just us, being us" }
+    { src: "image/image1", caption: "Noor-e-Nazar" },
+    { src: "image/image2", caption: "Jaan-e-Jahaan" },
+    { src: "image/image3", caption: "Husn-e-Jaana" },
+    { src: "image/image4", caption: "Dil-e-Azeez" },
+    { src: "image/image5", caption: "Hayat-e-Ishq" },
+    { src: "image/image6", caption: "Shab-e-Arzoo" }
   ],
 
   /* The love letter */
   letter: {
-    greeting: "My dearest Aanya,",
+    greeting: "My dearest Aryuuuu,",
     body:
-"Every moment with you is special. You make ordinary days beautiful, and I am grateful to have you in my life. No matter where life takes us, I want to keep creating beautiful memories with you.\n\nThank you for being my calm, my chaos, and my favourite person to come home to.",
+"Every moment with you is special. You make ordinary days beautiful, and I am grateful to have you in my life. No matter where life takes us.\n\nThank you for being my calm, my chaos, and my aloooo paneer.",
     signature: "Forever yours ❤️"
   },
 
   /* Final screen */
   final: {
     pre: "One Last Thing…",
-    big: "I LOVE YOU ❤️",
+    big: "I LOVE YOU IN EVERY UNIVERSE",
     sub: "Today, tomorrow, and every day after that."
   },
 
-  /* Optional: point this to your own romantic instrumental mp3.
-     If left empty, a soft generated piano/pad ambience plays instead. */
-  musicUrl: ""
+  /* Your song */
+  musicUrl: "audio/audio.mp3"
 };
 
 /* =========================================================
@@ -1212,28 +1217,21 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouch = matchMedia("(hover: none)").matches;
 
+/* Extensions tried in order when a gallery image is loaded.
+   So "image/image1" will try .jpg → .jpeg → .png → .webp → .gif */
+const IMG_EXTS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".JPG", ".JPEG", ".PNG"];
+
 /* =========================================================
    🎵 AUDIO ENGINE
-   - procedural romantic ambience (no file needed)
+   - background track from CONFIG.musicUrl
    - procedural UI sound effects
    - mute / unmute
    ========================================================= */
 const Sound = (() => {
-  let ctx = null, master = null, musicBus = null, sfxBus = null, delay = null;
-  let musicStarted = false, muted = false, schedulerId = null;
-  let nextNoteTime = 0, step = 0, noiseBuffer = null;
+  let ctx = null, master = null, sfxBus = null, delay = null;
+  let musicStarted = false, muted = false;
   let externalAudio = null;
-
-  const CHORDS = [
-    [53, 57, 60, 64],   // Fmaj7
-    [52, 55, 60, 64],   // C/E
-    [50, 57, 62, 65],   // Dm7
-    [46, 53, 58, 62]    // Bbmaj7
-  ];
-  const STEP_TIME = 0.42;     // seconds per arpeggio step
-  const STEPS_PER_CHORD = 8;
-
-  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  let noiseBuffer = null;
 
   function ensureCtx() {
     if (ctx) return ctx;
@@ -1244,10 +1242,6 @@ const Sound = (() => {
     master = ctx.createGain();
     master.gain.value = 0.9;
     master.connect(ctx.destination);
-
-    musicBus = ctx.createGain();
-    musicBus.gain.value = 0.30;
-    musicBus.connect(master);
 
     sfxBus = ctx.createGain();
     sfxBus.gain.value = 0.55;
@@ -1264,7 +1258,7 @@ const Sound = (() => {
     delay.connect(damp);
     damp.connect(fb);
     fb.connect(delay);
-    damp.connect(musicBus);
+    damp.connect(sfxBus);
 
     /* noise buffer for whooshes */
     const len = ctx.sampleRate * 0.9;
@@ -1275,78 +1269,6 @@ const Sound = (() => {
     return ctx;
   }
 
-  /* ---------- voices ---------- */
-  function padVoice(freq, time, dur, level) {
-    [0, 3.5, -3.5].forEach((detune, i) => {
-      const o = ctx.createOscillator();
-      o.type = i === 0 ? "triangle" : "sine";
-      o.frequency.value = freq;
-      o.detune.value = detune;
-
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.0001, time);
-      g.gain.linearRampToValueAtTime(level / (i + 1.2), time + 1.1);
-      g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
-
-      o.connect(g);
-      g.connect(musicBus);
-      o.start(time);
-      o.stop(time + dur + 0.2);
-    });
-  }
-
-  function pluckVoice(freq, time) {
-    const o = ctx.createOscillator();
-    o.type = "sine";
-    o.frequency.value = freq;
-
-    const o2 = ctx.createOscillator();
-    o2.type = "triangle";
-    o2.frequency.value = freq * 2;
-    const g2 = ctx.createGain();
-    g2.gain.value = 0.18;
-
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, time);
-    g.gain.linearRampToValueAtTime(0.16, time + 0.012);
-    g.gain.exponentialRampToValueAtTime(0.0001, time + 1.8);
-
-    o.connect(g);
-    o2.connect(g2);
-    g2.connect(g);
-    g.connect(musicBus);
-    g.connect(delay);
-
-    o.start(time); o2.start(time);
-    o.stop(time + 1.9); o2.stop(time + 1.9);
-  }
-
-  function scheduleStep(i, time) {
-    const chordIndex = Math.floor(i / STEPS_PER_CHORD) % CHORDS.length;
-    const chord = CHORDS[chordIndex];
-    const inChord = i % STEPS_PER_CHORD;
-
-    if (inChord === 0) {
-      chord.forEach((n, k) => padVoice(mtof(n), time + k * 0.03, 4.4, 0.10));
-    }
-    /* sparse arpeggio */
-    if (inChord % 2 === 0 || Math.random() < 0.35) {
-      const n = chord[Math.floor(Math.random() * chord.length)] + (Math.random() < 0.4 ? 24 : 12);
-      pluckVoice(mtof(n), time + rand(0, 0.03));
-    }
-  }
-
-  function tick() {
-    if (!ctx || ctx.state !== "running") return;
-    const lookahead = 0.25;
-    while (nextNoteTime < ctx.currentTime + lookahead) {
-      scheduleStep(step, nextNoteTime);
-      nextNoteTime += STEP_TIME;
-      step++;
-    }
-  }
-
-  /* ---------- public ---------- */
   function startMusic() {
     if (musicStarted) return;
     if (!ensureCtx()) return;
@@ -1355,17 +1277,16 @@ const Sound = (() => {
     if (CONFIG.musicUrl) {
       externalAudio = new Audio(CONFIG.musicUrl);
       externalAudio.loop = true;
-      externalAudio.volume = 0.55;
-      externalAudio.play().catch(() => {});
+      externalAudio.volume = muted ? 0 : 0.55;
+      externalAudio.play().catch(() => {
+        externalAudio = null;
+        musicStarted = false;
+      });
       musicStarted = true;
       return;
     }
 
     musicStarted = true;
-    nextNoteTime = ctx.currentTime + 0.15;
-    step = 0;
-    schedulerId = setInterval(tick, 60);
-    tick();
   }
 
   function sfx(kind = "chime") {
@@ -1434,10 +1355,12 @@ const Sound = (() => {
     muted = v;
     if (!ctx) { if (!v) startMusic(); return; }
     if (ctx.state === "suspended") ctx.resume();
+
     const target = v ? 0.0001 : 0.9;
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
     master.gain.exponentialRampToValueAtTime(target, ctx.currentTime + 0.35);
+
     if (externalAudio) externalAudio.volume = v ? 0 : 0.55;
     if (!v && !musicStarted) startMusic();
   }
@@ -1460,7 +1383,6 @@ const FX = (() => {
   const MAX = REDUCED ? 24 : (window.innerWidth < 700 ? 78 : 145);
   const BURST_MAX = 420;
 
-  /* ---------- sprites ---------- */
   function makeSprite(size, draw) {
     const c = document.createElement("canvas");
     c.width = c.height = size;
@@ -1523,7 +1445,6 @@ const FX = (() => {
     })
   };
 
-  /* ---------- modes ---------- */
   const MODES = {
     intro:   { heart: 1.0, spark: 1.1, petal: 0.25 },
     heart:   { heart: 1.4, spark: 1.3, petal: 0.2 },
@@ -1606,18 +1527,15 @@ const FX = (() => {
     }
   }
 
-  /* ---------- loop ---------- */
   function update(dt) {
     const m = MODES[mode] || MODES.intro;
 
-    /* spawn */
     if (!REDUCED) {
       for (const k in m) {
         if (Math.random() < m[k] * dt * 5.5) spawnAmbient(k);
       }
     }
 
-    /* integrate */
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
 
@@ -1783,7 +1701,6 @@ function goTo(idx) {
   toEl.setAttribute("aria-hidden", "false");
   toEl.scrollTop = 0;
 
-  /* fire scene entry animation */
   const handler = ENTER[SCENE_NAMES[idx]];
   if (handler) handler();
 }
@@ -1861,7 +1778,6 @@ bigHeart.addEventListener("click", () => {
       });
     }
   } else {
-    /* cycle again from start */
     heartIdx = 0;
     showHeartMessage(list[0]);
     heartIdx = 1;
@@ -1888,7 +1804,6 @@ const FLOWER_COLORS = ["#ffb3c9", "#ff8fb0", "#ffd1de", "#ff7096", "#ffc2d4"];
 function buildTreeDecor() {
   if (treeFlowers.childElementCount) return;
 
-  /* flowers */
   FLOWER_POS.forEach((pos, i) => {
     const outer = document.createElementNS(NS, "g");
     outer.setAttribute("transform", `translate(${pos[0]},${pos[1]})`);
@@ -1917,7 +1832,6 @@ function buildTreeDecor() {
     treeFlowers.appendChild(outer);
   });
 
-  /* floating hearts around the canopy */
   const heartSpots = [
     [90, 190], [330, 190], [120, 130], [300, 130],
     [210, 100], [150, 250], [270, 250], [70, 250], [350, 250]
@@ -1956,7 +1870,6 @@ ENTER.tree = function () {
 
   if (treeTl) treeTl.kill();
 
-  /* reset */
   draws.forEach(p => {
     const len = p.getTotalLength();
     p.style.strokeDasharray = len;
@@ -2000,7 +1913,6 @@ ENTER.tree = function () {
   gsap.to(seed, {
     duration: 0.001,
     onComplete() {
-      /* gentle floating hearts */
       gsap.to(hearts, {
         y: -8, duration: 2.4, ease: "sine.inOut",
         yoyo: true, repeat: -1, stagger: 0.22
@@ -2073,7 +1985,6 @@ function buildRose(x, y, scale) {
   const outer = document.createElementNS(NS, "g");
   outer.setAttribute("transform", `translate(${x},${y}) scale(${scale})`);
 
-  /* stem */
   const stem = document.createElementNS(NS, "path");
   stem.setAttribute("d", "M0,26 C4,70 -4,110 0,160");
   stem.setAttribute("stroke", "#3f6b4a");
@@ -2082,7 +1993,6 @@ function buildRose(x, y, scale) {
   stem.setAttribute("stroke-linecap", "round");
   outer.appendChild(stem);
 
-  /* leaves */
   [[-1, 78], [1, 112]].forEach(([dir, yy]) => {
     const leaf = document.createElementNS(NS, "ellipse");
     leaf.setAttribute("cx", String(dir * 16));
@@ -2095,7 +2005,6 @@ function buildRose(x, y, scale) {
     outer.appendChild(leaf);
   });
 
-  /* bloom */
   const bloom = document.createElementNS(NS, "g");
   bloom.setAttribute("class", "rose-bloom");
 
@@ -2174,6 +2083,27 @@ const PLACEHOLDER_GRADIENTS = [
   "linear-gradient(140deg,#ffc2d4,#e0345a)"
 ];
 
+function makePlaceholder(frame, i) {
+  frame.style.background = PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length];
+  const ph = document.createElement("div");
+  ph.className = "photo-ph";
+  ph.innerHTML = '<svg aria-hidden="true"><use href="#heartSym"/></svg>';
+  frame.appendChild(ph);
+}
+
+/* Resolves an <img>'s src by trying each extension in IMG_EXTS.
+   Calls onFail() if none work. */
+function resolveImageSrc(imgEl, basePath, onFail) {
+  let ei = 0;
+  const tryNext = () => {
+    if (ei >= IMG_EXTS.length) { onFail(); return; }
+    imgEl.src = basePath + IMG_EXTS[ei++];
+  };
+  imgEl.onerror = tryNext;
+  imgEl.onload = () => { imgEl.onerror = null; imgEl.onload = null; };
+  tryNext();
+}
+
 function buildGallery() {
   if (galleryEl.childElementCount) return;
 
@@ -2189,17 +2119,21 @@ function buildGallery() {
 
     if (item.src) {
       const img = document.createElement("img");
-      img.src = item.src;
       img.alt = item.caption;
       img.loading = "lazy";
       img.decoding = "async";
+      img.style.position = "absolute";
+      img.style.inset = "0";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
       frame.appendChild(img);
+      resolveImageSrc(img, item.src, () => {
+        img.remove();
+        makePlaceholder(frame, i);
+      });
     } else {
-      frame.style.background = PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length];
-      const ph = document.createElement("div");
-      ph.className = "photo-ph";
-      ph.innerHTML = '<svg aria-hidden="true"><use href="#heartSym"/></svg>';
-      frame.appendChild(ph);
+      makePlaceholder(frame, i);
     }
 
     const cap = document.createElement("figcaption");
@@ -2222,9 +2156,16 @@ function openLightbox(item, i) {
   lbContent.innerHTML = "";
   if (item.src) {
     const img = document.createElement("img");
-    img.src = item.src;
     img.alt = item.caption;
     lbContent.appendChild(img);
+    resolveImageSrc(img, item.src, () => {
+      img.remove();
+      const ph = document.createElement("div");
+      ph.className = "lb-ph";
+      ph.style.background = PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length];
+      ph.innerHTML = '<svg aria-hidden="true"><use href="#heartSym"/></svg>';
+      lbContent.appendChild(ph);
+    });
   } else {
     const ph = document.createElement("div");
     ph.className = "lb-ph";
@@ -2393,7 +2334,6 @@ const finalPre = document.getElementById("finalPre");
 const finalBig = document.getElementById("finalBig");
 const finalSub = document.getElementById("finalSub");
 const finalHeart = document.getElementById("finalHeart");
-const replayBtn = document.getElementById("replayBtn");
 
 let finalTl = null;
 
@@ -2420,8 +2360,6 @@ ENTER.final = function () {
   gsap.set(finalBig, { opacity: 0, scale: 0.55 });
   gsap.set(finalSub, { opacity: 0, y: 18 });
   gsap.set(finalHeart, { opacity: 0, scale: 0.4 });
-  gsap.set(replayBtn, { opacity: 0, y: 14 });
-  replayBtn.style.pointerEvents = "none";
 
   finalTl = gsap.timeline({ delay: 0.35 });
 
@@ -2438,23 +2376,12 @@ ENTER.final = function () {
     .to(finalHeart, {
       opacity: 1, scale: 1, duration: 0.9, ease: "back.out(2)"
     }, "-=1.0")
-    .to(finalSub, { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" }, "-=0.7")
-    .to(replayBtn, {
-      opacity: 1, y: 0, duration: 0.65, ease: "power2.out",
-      onStart() { replayBtn.style.pointerEvents = "auto"; }
-    }, "-=0.45");
+    .to(finalSub, { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" }, "-=0.7");
 
-  /* gentle float on the big text */
   gsap.to(finalBig, {
     y: -8, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2
   });
 };
-
-replayBtn.addEventListener("click", () => {
-  Sound.sfx("whoosh");
-  gsap.killTweensOf(finalBig);
-  goTo(0);
-});
 
 /* =========================================================
    🔗 GLOBAL NAV WIRING
@@ -2501,22 +2428,18 @@ musicBtn.addEventListener("click", e => {
    🚀 INIT
    ========================================================= */
 (function init() {
-  /* build dynamic content */
   buildProgress();
   buildGallery();
   buildTreeDecor();
   buildRoses();
 
-  /* apply config text */
   document.getElementById("giftMsg").textContent = CONFIG.giftMessage;
   envGreet.textContent = CONFIG.letter.greeting;
   letterGreet.textContent = CONFIG.letter.greeting;
 
-  /* start particle engine */
   FX.init();
   FX.setMode("intro");
 
-  /* activate first scene */
   const first = sceneEls[0];
   first.classList.add("active");
   first.style.pointerEvents = "auto";
@@ -2531,7 +2454,6 @@ musicBtn.addEventListener("click", e => {
   updateProgress();
   ENTER.intro();
 
-  /* nice touch: subtle parallax on pointer for desktop */
   if (!isTouch && !REDUCED) {
     let px = 0, py = 0;
     window.addEventListener("pointermove", e => {
